@@ -58,9 +58,12 @@
                             <x-input-error :messages="$errors->get('createdAt')" class="mt-2" />
                         </div> -->
                         <div class="flex items-center justify-end mt-4">
+                            <a class="normal text-sm text-gray-600 hover:text-gray-900 hover:bold text-sm" href="#">
+                                {{ __('Reset') }}
+                            </a>
 
-                            <x-primary-button class="ml-4">
-                                {{ __('Tambah Barang') }}
+                            <x-primary-button class="ml-4 bg-blue-400 hover:bg-blue-800 hover:text-gray-400">
+                                {{ __('Tambah') }}
                             </x-primary-button>
                         </div>
                     </form>

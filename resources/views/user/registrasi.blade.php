@@ -69,7 +69,10 @@
                                 <option selected>~Pilih Agama~</option>
                                 <option value="1">Islam</option>
                                 <option value="2">Kristen</option>
-                                <option value="2">Kristen Katolik</option>
+                                <option value="3">Kristen Katolik</option>
+                                <option value="4">Hindu</option>
+                                <option value="5">Buddha</option>
+                                <option value="6">Konghucu</option>
                             </select>
                             <x-input-error :messages="$errors->get('agama')" class="mt-2" />
                         </div>
@@ -104,11 +107,11 @@
                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                         </div>
                         <div class="flex items-center justify-end mt-4">
-                            <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                                {{ __('Already registered?') }}
+                            <a class="normal text-sm text-gray-600 hover:text-gray-900 hover:bold text-sm" href="#">
+                                {{ __('Reset') }}
                             </a>
 
-                            <x-primary-button class="ml-4">
+                            <x-primary-button class="ml-4 bg-blue-400 hover:bg-blue-800 hover:text-gray-400">
                                 {{ __('Register') }}
                             </x-primary-button>
                         </div>
