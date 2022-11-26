@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+
 
 class UserController extends Controller
 {
@@ -17,6 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        // Alert::success('Congrats', 'You\'ve Successfully Registered');
         return view('user.daftarPengguna', compact('users'));
     }
 
@@ -62,8 +65,8 @@ class UserController extends Controller
             'jeniskelamin' => $request->jeniskelamin,
             'password' => Hash::make($request->password),
         ]);
-
         $users = User::all();
+        Alert::success('Success', 'Data Berhasil Ditambahkan');
         return view('user.daftarPengguna', compact('users'));
     }
 
@@ -87,7 +90,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findorfail($id);
+        return view('user.userEdit', compact('user'));
     }
 
     /**
@@ -99,7 +103,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::where('id', $id)->update([
+            'username' => $request->username,
+            'fullname' => $request->fullname,
+            'email' => $request->email,
+            'phonenumber' => $request->phonenumber,
+            'address' => $request->address,
+            'birthdate' => $request->birthdate,
+            'agama' => $request->agama,
+            'jeniskelamin' => $request->jeniskelamin,
+        ]);
+        Alert::success('Success', 'Data Berhasil Diubah');
+        return redirect()->route('user');
     }
 
     /**
@@ -110,6 +125,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $get = User::findorfail($id);
+        $get->delete();
+        Alert::success('Success', 'Data Berhasil Dihapus');
+        return redirect()->route('user');
     }
 }

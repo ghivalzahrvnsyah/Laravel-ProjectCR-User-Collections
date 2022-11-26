@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Collections;
-use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
+
 
 class CollectionsController extends Controller
 {
@@ -39,23 +41,43 @@ class CollectionsController extends Controller
      */
     public function store(Request $request)
     {
-        // $request -> validate([
-        //     'namaKoleksi' => ['required'],
-        //     'jenisKoleksi' => ['required'],
-        //     'jumlahKoleksi' => ['required'],
-        //     'createdAt' => ['required'],
-        //     ]);
+        $request->validate([
+            'namaKoleksi' => ['required'],
+            'jenisKoleksi' => ['required'],
+            'jumlahKoleksi' => ['required'],
+            // 'createdAt' => ['required'],
+        ]);
 
         $collections = Collections::create([
             'namaKoleksi' => $request->namaKoleksi,
             'jenisKoleksi' => $request->jenisKoleksi,
             'jumlahKoleksi' => $request->jumlahKoleksi,
             // 'createdAt' => $request->createdAt,
-            ]);
+        ]);
 
         $collection = Collections::all();
+        Alert::success('Success', 'Data Berhasil Ditambahkan');
         return view('koleksi.daftarKoleksi', compact('collection'));
     }
+    // public function getAllCollection() {
+    //     $collection = DB :: table('collections') 
+    //     -> select( 
+    //         'id as id',
+    //         'namaKoleksi as namaKoleksi',
+    //         'jenisKoleksi as jenisKoleksi',
+    //         'jumlahAwal as jumlahAwal',
+    //         'jumlahSisa as jumlahSisa',
+    //         'jumlahKeluar as jumlahKeluar',
+    //     )
+    //     ->orderBy('namaKoleksi', 'asc')
+    //     ->get();
+    //     return ::of($collection)
+    //     ->addColumn('action', function ($collection) {
+    //         return '<a href="koleksiView" class="btn btn-xs btn-primary edit" id="'.$collection->id.'"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+    //     })
+    //     ->make(true);
+
+    // }
 
     /**
      * Display the specified resource.
@@ -77,7 +99,8 @@ class CollectionsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $collection = Collections::findorFail($id);
+        return view('koleksi.koleksiEdit', compact('collection'));
     }
 
     /**
@@ -89,7 +112,18 @@ class CollectionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // $request->validate([
+        //     'namaKoleksi' => ['required'],
+        //     'jenisKoleksi' => ['required'],
+        //     'jumlahKoleksi' => ['required'],
+        // ]);
+        $collection = Collections::where('id', $id)->update([
+            'namaKoleksi' => $request->namaKoleksi,
+            'jenisKoleksi' => $request->jenisKoleksi,
+            'jumlahKoleksi' => $request->jumlahKoleksi,
+        ]);
+        Alert::success('Success', 'Data Berhasil Diupdate');
+        return redirect()->route('koleksi');
     }
 
     /**
@@ -100,6 +134,13 @@ class CollectionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Alert::question('Delete this Data?', 'Are you sure?');
+
+        $get = Collections::findorFail($id);
+        $get->delete();
+        Alert::success('Success', 'Data Berhasil Dihapus');
+
+
+        return redirect()->route('koleksi');
     }
 }
